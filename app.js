@@ -14,6 +14,8 @@ mongoose.connect(db.mongoDB, {
     useUnifiedTopology: true
 })
 
+var port=3000 || process.env.PORT
+
 const userModel=require('./models/user')
 
 var smtpTransport = nodemailer.createTransport({
@@ -145,6 +147,6 @@ app.post('/login',(req,res)=>{
     })
 })
 
-app.listen(3000,()=>{
+app.listen(port,()=>{
     console.log('server running')
 })
