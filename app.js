@@ -1,7 +1,7 @@
 const express=require('express')
 const bodyParser=require('body-parser')
 const bcryptjs=require('bcryptjs')
-
+var nodemailer = require("nodemailer");
 var app=express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
@@ -16,18 +16,25 @@ mongoose.connect(db.mongoDB, {
 
 const userModel=require('./models/user')
 
+var smtpTransport = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+        user: "ffds.new@gmail.com",
+        pass: "ffds_codechefvit"
+    }
+});
+var rand,mailOptions,host,link,verified=false;
+
 app.post('/register',(req,res,next)=>{
     var post_data=req.body
     var plainPass=post_data.password
     var username=post_data.name
     var email=post_data.email
     var gender=post_data.gender
-    var phone=post_data.phone
     bcryptjs.hash(plainPass, 10, function (err, hash){
         var newobj={
             name:username,
             email,
-            phone,
             gender,
             password:hash
         }
@@ -52,6 +59,64 @@ app.post('/register',(req,res,next)=>{
         
 
     })
+})
+
+app.post('/send',function(req,res){
+    rand=Math.floor((Math.random() * 100) + 54);
+    host=req.get('host');
+    link="http://"+req.get('host')+"/verify?id="+rand;
+    var mailto=req.body.too
+    verified=false
+    mailOptions={
+        to : mailto,
+        subject : "Please confirm your Email account",
+        html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
+    }
+    console.log(mailOptions);
+    smtpTransport.sendMail(mailOptions, function(error, response){
+    if(error){
+            console.log(error);
+        res.json("error");
+    }else{
+            console.log("Message sent: ");
+        res.json("sent");
+        }
+    });
+    });
+
+app.get('/verify',function(req,res){
+    console.log(req.protocol+":/"+req.get('host'));
+    if((req.protocol+"://"+req.get('host'))==("http://"+host))
+    {
+    console.log("Domain is matched. Information is from Authentic email");
+    console.log(rand)
+    if(req.query.id==rand)
+    {
+        console.log("email is verified");
+        verified=true
+        
+        res.json("Email  is been Successfully verified");
+    }
+    else
+    {
+        console.log("email is not verified");
+        res.json("Bad Request");
+    }
+    }
+    else
+    {
+    res.json("Request is from unknown source");
+    }
+    });
+
+    app.post('/verify',(req,res)=>{
+    if(verified==true)
+    {
+        res.json("email is verified")
+    }
+    else{
+        res.json("not verified")
+    }
 })
 
 app.post('/login',(req,res)=>{

@@ -18,11 +18,6 @@ var users = new mongoose.Schema({
             }
         }
     },
-    phone: {
-        type: String,
-        required: true,
-        maxlength: 10
-    },
     gender:{
         type:String
     },
