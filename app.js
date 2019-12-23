@@ -14,7 +14,7 @@ mongoose.connect(db.mongoDB, {
     useUnifiedTopology: true
 })
 
-var port=3000 || process.env.PORT
+var port=process.env.PORT || 3000
 
 const userModel=require('./models/user')
 
