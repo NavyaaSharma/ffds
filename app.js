@@ -66,8 +66,8 @@ app.post('/register',(req,res,next)=>{
 app.post('/send',function(req,res){
     rand=Math.floor((Math.random() * 100) + 54);
     host=req.get('host');
-    link="http://"+req.get('host')+"/verify?id="+rand;
-    var mailto=req.query.too
+    link="http://"+req.get('host')+"/verify?email="+req.query.mailto+"&id="+rand;
+    var mailto=req.query.mailto
     verified=false
     mailOptions={
         to : mailto,
@@ -95,8 +95,14 @@ app.get('/verify',function(req,res){
     if(req.query.id==rand)
     {
         console.log("email is verified");
-        verified=true
-        
+        userModel.findOne({email:req.query.email}).then((user)=>{
+            if(user){
+                user.verified=true
+                console.log(user)
+                user.save()
+            }
+        })
+        console.log('updated')
         res.json("Email  is been Successfully verified");
     }
     else
@@ -112,13 +118,15 @@ app.get('/verify',function(req,res){
     });
 
 app.post('/verifyemail',(req,res)=>{
-    if(verified==true)
-    {
-        res.json("email is verified")
-    }
-    else{
-        res.json("email not verified")
-    }
+    userModel.findOne({email:req.query.email}).then((user)=>{
+        if(user.verified==true)
+        {
+            res.json("email is verified")
+        }
+        else{
+            res.json("email not verified")
+        }
+    })
 })
 
 app.post('/login',(req,res)=>{

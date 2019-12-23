@@ -18,6 +18,10 @@ var users = new mongoose.Schema({
             }
         }
     },
+    verified:{
+        type:Boolean,
+        default:false
+    },
     gender:{
         type:String
     },
