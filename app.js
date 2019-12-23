@@ -21,8 +21,8 @@ const userModel=require('./models/user')
 var smtpTransport = nodemailer.createTransport({
     service: "Gmail",
     auth: {
-        user: "ffds.new@gmail.com",
-        pass: "ffds_codechefvit"
+        user: process.env.email,
+        pass: process.env.password
     }
 });
 var rand,mailOptions,host,link,verified=false;
