@@ -28,7 +28,7 @@ var smtpTransport = nodemailer.createTransport({
 var rand,mailOptions,host,link,verified=false;
 
 app.post('/register',(req,res,next)=>{
-    var post_data=req.body
+    var post_data=req.query
     var plainPass=post_data.password
     var username=post_data.name
     var email=post_data.email
@@ -67,7 +67,7 @@ app.post('/send',function(req,res){
     rand=Math.floor((Math.random() * 100) + 54);
     host=req.get('host');
     link="http://"+req.get('host')+"/verify?id="+rand;
-    var mailto=req.body.too
+    var mailto=req.query.too
     verified=false
     mailOptions={
         to : mailto,
@@ -111,24 +111,24 @@ app.get('/verify',function(req,res){
     }
     });
 
-    app.post('/verify',(req,res)=>{
+app.post('/verifyemail',(req,res)=>{
     if(verified==true)
     {
         res.json("email is verified")
     }
     else{
-        res.json("not verified")
+        res.json("email not verified")
     }
 })
 
 app.post('/login',(req,res)=>{
-    var post_data=req.body
+    var post_data=req.query
     var email=post_data.email
     var password=post_data.password
 
     userModel.findOne({email:email}).then((user)=>{
         if(!user){
-            res.json('Email not found')
+            res.json('User not found')
         }
         else {
             bcryptjs.compare(password, user.password, function (err, result) {
