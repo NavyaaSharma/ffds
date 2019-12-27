@@ -43,17 +43,23 @@ app.post('/register',(req,res,next)=>{
         userModel.findOne({email:email}).then((user)=>{
             if(user)
             {
-                res.json('User already exists')
+                res.json({
+                    response:'User already exists'
+                })
             }
             else{
                 new userModel(newobj).save((err,user)=>{
                     if(err)
                     {
-                        res.json(err)
+                        res.json({
+                            response:err
+                        })
                     }
                     if(user)
                     {
-                        res.json('Registered Successfully')
+                        res.json({
+                            response:'Registered Successfully'
+                        })
                     }
                 })
             }
@@ -74,14 +80,18 @@ app.post('/send',function(req,res){
         subject : "Please confirm your Email account",
         html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
     }
-    console.log(mailOptions);
+    console.log(mailOptions)
     smtpTransport.sendMail(mailOptions, function(error, response){
     if(error){
-            console.log(error);
-        res.json("error");
+            console.log(error)
+        res.json({
+            response:"error"
+        })
     }else{
             console.log("Message sent: ");
-        res.json("sent");
+        res.json({
+            response:"sent"
+        })
         }
     });
     });
@@ -103,28 +113,38 @@ app.get('/verify',function(req,res){
             }
         })
         console.log('updated')
-        res.json("Email  is been Successfully verified");
+        res.json({
+            response:"Email  is been Successfully verified"
+        })
     }
     else
     {
-        console.log("email is not verified");
-        res.json("Bad Request");
+        console.log("email is not verified")
+        res.json({
+            response:"Bad Request"
+        })
     }
     }
     else
     {
-    res.json("Request is from unknown source");
+    res.json({
+        response:"Request is from unknown source"
+        })
     }
-    });
+    })
 
 app.post('/verifyemail',(req,res)=>{
     userModel.findOne({email:req.query.email}).then((user)=>{
         if(user.verified==true)
         {
-            res.json("email is verified")
+            res.json({
+                response:"email is verified"
+            })
         }
         else{
-            res.json("email not verified")
+            res.json({
+                response:"email not verified"
+            })
         }
     })
 })
@@ -136,12 +156,16 @@ app.post('/login',(req,res)=>{
 
     userModel.findOne({email:email}).then((user)=>{
         if(!user){
-            res.json('User not found')
+            res.json({
+                response:'User not found'
+            })
         }
         else {
             bcryptjs.compare(password, user.password, function (err, result) {
                 if (result == false) {
-                    res.json('Invalid Password')
+                    res.json({
+                        response:'Invalid Password'
+                    })
             
                 } else {
                     res.json({
