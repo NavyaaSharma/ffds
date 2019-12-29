@@ -15,9 +15,9 @@ json response - error
 
 ### https://ffds-new.herokuapp.com/verifyemail?email={useremail}
 ### if email is verified then
-json response - email is verified
+json response - Email is verified
 ### if email is not verified
-json response - email not verified
+json response - Email is not verified
 
 ### https://ffds-new.herokuapp.com/login?email={useremail}&password={userpassword}
 ### if email doesnt exist

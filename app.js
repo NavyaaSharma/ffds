@@ -84,14 +84,10 @@ app.post('/send',function(req,res){
     smtpTransport.sendMail(mailOptions, function(error, response){
     if(error){
             console.log(error)
-        res.json({
-            response:"error"
-        })
+        res.json("error")
     }else{
             console.log("Message sent: ");
-        res.json({
-            response:"sent"
-        })
+        res.json("sent")
         }
     });
     });
@@ -113,23 +109,17 @@ app.get('/verify',function(req,res){
             }
         })
         console.log('updated')
-        res.json({
-            response:"Email  is been Successfully verified"
-        })
+        res.json("Email is been Successfully verified")
     }
     else
     {
         console.log("email is not verified")
-        res.json({
-            response:"Bad Request"
-        })
+        res.json("Bad Request - email not verified")
     }
     }
     else
     {
-    res.json({
-        response:"Request is from unknown source"
-        })
+    res.json("Request is from unknown source")
     }
     })
 
@@ -137,14 +127,10 @@ app.post('/verifyemail',(req,res)=>{
     userModel.findOne({email:req.query.email}).then((user)=>{
         if(user.verified==true)
         {
-            res.json({
-                response:"email is verified"
-            })
+            res.json("email is verified")
         }
         else{
-            res.json({
-                response:"email not verified"
-            })
+            res.json("email not verified")
         }
     })
 })
