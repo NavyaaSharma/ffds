@@ -43,23 +43,17 @@ app.post('/register',(req,res,next)=>{
         userModel.findOne({email:email}).then((user)=>{
             if(user)
             {
-                res.json({
-                    response:'User already exists'
-                })
+                res.json('User already exists')
             }
             else{
                 new userModel(newobj).save((err,user)=>{
                     if(err)
                     {
-                        res.json({
-                            response:err
-                        })
+                        res.json(err)
                     }
                     if(user)
                     {
-                        res.json({
-                            response:'Registered Successfully'
-                        })
+                        res.json('Registered Successful')
                     }
                 })
             }
