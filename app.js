@@ -17,6 +17,7 @@ mongoose.connect(db.mongoDB, {
 var port=process.env.PORT || 3000
 
 const userModel=require('./models/user')
+const detailsModel=require('./models/details')
 
 var smtpTransport = nodemailer.createTransport({
     service: "Gmail",
@@ -157,6 +158,84 @@ app.post('/login',(req,res)=>{
             })
         }
     })
+})
+
+app.post('/addDetails',(req,res)=>{
+
+
+    var data=req.query
+
+    var obj={
+        name:data.name,
+        email:data.email,
+        gender:data.gender,
+        bio:data.bio,
+        branch:data.branch,
+        year:data.year,
+        interests:data.interests
+    }
+
+    new detailsModel(obj).save((err,user)=>{
+        if(err)
+        {
+            res.json(err)
+        }
+        if(user)
+        {
+            res.json('Details Updated')
+        }
+    })
+
+})
+
+app.post('/updateDetails',(req,res)=>{
+
+    var data=req.query
+
+    detailsModel.find({email:email}).then((user)=>{
+        user.bio=data.bio
+        user.gender=data.gender
+        user.branch=data.branch
+        user.year=data.year
+        user.interests=data.interests
+
+        user.save((err,user)=>{
+            if (err)
+            {
+                throw err
+            }
+            if(user)
+            {
+                res.json('Details Updated Successfully')
+            }
+            else
+            {
+                res.json('Couldnt update the details')
+            }
+        
+        })
+    })
+})
+
+app.post('/showDetails',(req,res)=>{
+
+    detailsModel.find({email:email}).then((user)=>{
+        if(user)
+        {
+            res.json({
+                name:user.name,
+                email:user.email,
+                gender:user.gender,
+                bio:user.bio,
+                branch:data.branch,
+                year:user.year,
+                interests:user.interests
+
+            })
+        }
+    })
+
+    
 })
 
 app.listen(port,()=>{
