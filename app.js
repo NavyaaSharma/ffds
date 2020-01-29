@@ -192,7 +192,7 @@ app.post('/updateDetails',(req,res)=>{
 
     var data=req.query
 
-    detailsModel.find({email:data.email}).then((user)=>{
+    detailsModel.find({email:data.email},function(err,user){
         if(user)
         {
             user.bio=data.bio
