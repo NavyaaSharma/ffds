@@ -217,7 +217,7 @@ app.post('/showDetails',(req,res)=>{
                 email:user.email,
                 gender:user.gender,
                 bio:user.bio,
-                branch:data.branch,
+                branch:user.branch,
                 year:user.year,
                 interests:user.interests
 
