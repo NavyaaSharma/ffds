@@ -192,7 +192,7 @@ app.post('/updateDetails',(req,res)=>{
 
     var data=req.query
 
-    detailsModel.find({email:email}).then((user)=>{
+    detailsModel.find({email:data.email}).then((user)=>{
         user.bio=data.bio
         user.gender=data.gender
         user.branch=data.branch
@@ -219,7 +219,8 @@ app.post('/updateDetails',(req,res)=>{
 
 app.post('/showDetails',(req,res)=>{
 
-    detailsModel.find({email:email}).then((user)=>{
+
+    detailsModel.find({email:req.query.email}).then((user)=>{
         if(user)
         {
             res.json({
