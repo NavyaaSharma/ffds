@@ -193,27 +193,34 @@ app.post('/updateDetails',(req,res)=>{
     var data=req.query
 
     detailsModel.find({email:data.email}).then((user)=>{
-        user.bio=data.bio
-        user.gender=data.gender
-        user.branch=data.branch
-        user.year=data.year
-        user.interests=data.interests
+        if(user)
+        {
+            user.bio=data.bio
+            user.gender=data.gender
+            user.branch=data.branch
+            user.year=data.year
+            user.interests=data.interests
 
-        user.save((err,user)=>{
-            if (err)
-            {
-                throw err
-            }
-            if(user)
-            {
-                res.json('Details Updated Successfully')
-            }
-            else
-            {
-                res.json('Couldnt update the details')
-            }
+            user.save((err,user)=>{
+                if (err)
+                {
+                    throw err
+                }
+                if(user)
+                {
+                    res.json('Details Updated Successfully')
+                }
+                else
+                {
+                    res.json('Couldnt update the details')
+                }
+            
+            })
+        }
+        else{
+            res.json('User not found')
+        }
         
-        })
     })
 })
 
