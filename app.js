@@ -191,36 +191,18 @@ app.post('/addDetails',(req,res)=>{
 app.post('/updateDetails',(req,res)=>{
 
     var data=req.query
+    var obj={
+        name:data.name,
+        email:data.email,
+        gender:data.gender
+    }
 
-    detailsModel.find({email:data.email},function(err,user){
-        if(user)
-        {
-            user.bio=data.bio
-            user.gender=data.gender
-            user.branch=data.branch
-            user.year=data.year
-            user.interests=data.interests
+    detailsModel.findOneAndUpdate({email:data.email},{$set: obj},{new:true}).then((user1)=>{
 
-            user.save((err,user)=>{
-                if (err)
-                {
-                    throw err
-                }
-                if(user)
-                {
-                    res.json('Details Updated Successfully')
-                }
-                else
-                {
-                    res.json('Couldnt update the details')
-                }
-            
-            })
-        }
-        else{
-            res.json('User not found')
-        }
+        res.json('Details Updated')
         
+    }).catch( (err)=>{
+        res.json('failed to update')
     })
 })
 
