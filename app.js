@@ -233,6 +233,9 @@ app.post('/showDetails',(req,res)=>{
 
             })
         }
+        else{
+            res.json('User cannot be found')
+        }
     })
 
     
