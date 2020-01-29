@@ -194,7 +194,11 @@ app.post('/updateDetails',(req,res)=>{
     var obj={
         name:data.name,
         email:data.email,
-        gender:data.gender
+        gender:data.gender,
+        bio:data.bio,
+        branch:data.branch,
+        year:data.year,
+        interests:data.interests
     }
 
     detailsModel.findOneAndUpdate({email:data.email},{$set: obj},{new:true}).then((user1)=>{
@@ -209,9 +213,8 @@ app.post('/updateDetails',(req,res)=>{
 app.post('/showDetails',(req,res)=>{
 
 
-    detailsModel.find({email:req.query.email}).then((user)=>{
-        if(user)
-        {
+    detailsModel.findOne({email:req.query.email}).then((user)=>{
+    
             res.json({
                 name:user.name,
                 email:user.email,
@@ -221,11 +224,11 @@ app.post('/showDetails',(req,res)=>{
                 year:user.year,
                 interests:user.interests
 
-            })
-        }
-        else{
+            })     
+    }).catch((err)=>{
+        
             res.json('User cannot be found')
-        }
+
     })
 
     
