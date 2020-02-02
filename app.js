@@ -175,16 +175,23 @@ app.post('/addDetails',(req,res)=>{
         interests:data.interests
     }
 
-    new detailsModel(obj).save((err,user)=>{
-        if(err)
-        {
-            res.json(err)
-        }
-        if(user)
-        {
-            res.json('Details Updated')
-        }
+    userModel.findOne({email:data.email}).then((result)=>{
+        
+            new detailsModel(obj).save((err,user)=>{
+                if(err)
+                {
+                    res.json(err)
+                }
+                if(user)
+                {
+                    res.json('Details Added')
+                }
+            })
+
+    }).catch((err)=>{
+        res.json("User not registered")
     })
+
 
 })
 
