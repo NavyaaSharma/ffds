@@ -174,9 +174,15 @@ app.post('/addDetails',(req,res)=>{
         year:data.year,
         interests:data.interests
     }
-
+    console.log(data.email)
     userModel.findOne({email:data.email}).then((result)=>{
-        
+        console.log(result)
+
+        if(! result)
+        {
+            res.json("User not registered")
+        }
+        else{
             new detailsModel(obj).save((err,user)=>{
                 if(err)
                 {
@@ -184,15 +190,12 @@ app.post('/addDetails',(req,res)=>{
                 }
                 if(user)
                 {
-                    res.json('Details Added')
+                    res.json("Details Added")
                 }
             })
-
-    }).catch((err)=>{
-        res.json("User not registered")
+        }
     })
-
-
+        
 })
 
 app.post('/updateDetails',(req,res)=>{
@@ -234,7 +237,7 @@ app.post('/showDetails',(req,res)=>{
             })     
     }).catch((err)=>{
         
-            res.json('User cannot be found')
+            res.json('Details cannot be found')
 
     })
 
