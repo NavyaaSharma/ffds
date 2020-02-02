@@ -186,7 +186,7 @@ app.post('/addDetails',(req,res)=>{
             new detailsModel(obj).save((err,user)=>{
                 if(err)
                 {
-                    res.json(err)
+                    res.json("Details couldn't be added")
                 }
                 if(user)
                 {
