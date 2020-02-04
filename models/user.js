@@ -22,12 +22,34 @@ var users = new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    gender:{
-        type:String
-    },
     password: {
         type: String,
         required: true
+    },
+    phone:{
+        type:Number
+    },
+    branch:{
+        type:String,
+        default:""
+    },
+    gender:{
+        type:String,
+        default:""
+    },
+    bio: {
+        type: String,
+        default:""
+    },
+    year:
+    {
+        type:String,
+        default:""
+    },
+    expectations:
+    {
+        type:String,
+        default:""
     }
 })
 

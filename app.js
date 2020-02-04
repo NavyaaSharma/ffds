@@ -17,7 +17,6 @@ mongoose.connect(db.mongoDB, {
 var port=process.env.PORT || 3000
 
 const userModel=require('./models/user')
-const detailsModel=require('./models/details')
 
 var smtpTransport = nodemailer.createTransport({
     service: "Gmail",
@@ -34,11 +33,13 @@ app.post('/register',(req,res,next)=>{
     var username=post_data.name
     var email=post_data.email
     var gender=post_data.gender
+    var phone=post_data.phone
     bcryptjs.hash(plainPass, 10, function (err, hash){
         var newobj={
             name:username,
             email,
             gender,
+            phone,
             password:hash
         }
         userModel.findOne({email:email}).then((user)=>{
@@ -160,58 +161,20 @@ app.post('/login',(req,res)=>{
     })
 })
 
-app.post('/addDetails',(req,res)=>{
 
-
-    var data=req.query
-
-    var obj={
-        name:data.name,
-        email:data.email,
-        gender:data.gender,
-        bio:data.bio,
-        branch:data.branch,
-        year:data.year,
-        interests:data.interests
-    }
-    console.log(data.email)
-    userModel.findOne({email:data.email}).then((result)=>{
-        console.log(result)
-
-        if(! result)
-        {
-            res.json("User not registered")
-        }
-        else{
-            new detailsModel(obj).save((err,user)=>{
-                if(err)
-                {
-                    res.json("Details couldn't be added")
-                }
-                if(user)
-                {
-                    res.json("Details Added")
-                }
-            })
-        }
-    })
-        
-})
 
 app.post('/updateDetails',(req,res)=>{
 
     var data=req.query
     var obj={
-        name:data.name,
         email:data.email,
-        gender:data.gender,
         bio:data.bio,
         branch:data.branch,
         year:data.year,
-        interests:data.interests
+        expectations:expectations
     }
 
-    detailsModel.findOneAndUpdate({email:data.email},{$set: obj},{new:true}).then((user1)=>{
+    userModel.findOneAndUpdate({email:data.email},{$set: obj},{new:true}).then((user1)=>{
 
         res.json('Details Updated')
         
@@ -228,11 +191,12 @@ app.post('/showDetails',(req,res)=>{
             res.json({
                 name:user.name,
                 email:user.email,
+                phone:phone,
                 gender:user.gender,
                 bio:user.bio,
                 branch:user.branch,
                 year:user.year,
-                interests:user.interests
+                expectations:expectations
 
             })     
     }).catch((err)=>{
